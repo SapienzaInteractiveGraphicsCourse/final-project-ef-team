@@ -7,19 +7,12 @@ let lastKey = 0;
 function onKeyDown(event) {
 	//When the user put a button down
 	//the only accepted input is the same key up
+	//or the esc key down
 	stopInteraction();
 	lastKey = event.keyCode;
 	document.addEventListener('keyup', customKeyUp, false);
 
 	switch ( event.keyCode ) {
-		case 27: // Escape
-			songBell(bells[0])
-			songBell(bells[1])
-			songBell(bells[2])
-			songBell(bells[3])
-			songBell(bells[4])
-			songBell(bells[5])
-			break;
 		case 37: // Left
 		case 65: // a
 			walk(true, 'end');
@@ -28,13 +21,23 @@ function onKeyDown(event) {
 		case 68: // d
 			walk(false, 'end');
 			break;
-		case 32:
+		case 32: //Space
 			break;
 		default:
 			stopInteraction();
 			setUpListener();
 			break;
 	}
+}
+
+function escKeyDown(event) {
+	if(event.keyCode === 27) { //Escape
+		event.preventDefault();
+		if(window.confirm("Do you really want to exit?")) {
+			document.location.reload();
+		}
+	}
+	
 }
 
 function onKeyUp(event) {	
@@ -105,6 +108,7 @@ function doSomething() {
 
 export function setUpListener() {
     document.addEventListener( 'keydown', onKeyDown, false);
+    document.addEventListener( 'keydown', escKeyDown, false);
 }
 
 export function stopInteraction() {

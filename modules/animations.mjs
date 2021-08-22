@@ -9,7 +9,7 @@ import  { player, bells } from './models.mjs'
 const songTime = 3000;
 function songBell(bell) {
     const root = bell.getObjectByName("RootNode");
-    const torus = bell.getObjectByName("Torus");
+    const clapper = bell.getObjectByName("Torus");
 
     //avanti e indietro come rotazione della bell
     const bell01 = new TWEEN.Tween(root.rotation).to({x:-Math.PI/3}, 1000).easing(TWEEN.Easing.Quadratic.In);
@@ -20,17 +20,20 @@ function songBell(bell) {
     bell01.start();
 
     //e del pendolo
-    const torus01 = new TWEEN.Tween(torus.rotation).to({x:torus.rotation.x+Math.PI/6}, 500);
-    const torus02 = new TWEEN.Tween(torus.rotation).to({x:torus.rotation.x-Math.PI/6}, 1000);
-    const torus03 = new TWEEN.Tween(torus.rotation).to({x:torus.rotation.x}, 500);
-    torus01.chain(torus02);
-    torus02.chain(torus03);
-    torus01.start();
+    const clapper01 = new TWEEN.Tween(clapper.rotation).to({x:clapper.rotation.x+Math.PI/6}, 500);
+    const clapper02 = new TWEEN.Tween(clapper.rotation).to({x:clapper.rotation.x-Math.PI/6}, 1000);
+    const clapper03 = new TWEEN.Tween(clapper.rotation).to({x:clapper.rotation.x}, 500);
+    clapper01.chain(clapper02);
+    clapper02.chain(clapper03);
+    clapper01.start();
 
     //e accendi la lucina dentro
     bell.getObjectByName('Light').intensity = 1;
+    setTimeout(function() {
+        bell.getObjectByName('Light').intensity = 0;
+    }, 2500);
 
-    // const light01 = new TWEEN.Tween(bell['light'].position).to({x:torus.rotation.x+Math.PI/6}, 1000);
+    // const light01 = new TWEEN.Tween(bell['light'].position).to({x:clapper.rotation.x+Math.PI/6}, 1000);
     // light01.start();
 } 
 

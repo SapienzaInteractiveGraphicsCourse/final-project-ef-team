@@ -9,11 +9,10 @@
 	</head>
 
 	<body>
-		<canvas id="gl-canvas">
-		Oops ... your browser doesn't support the HTML5 canvas element
-		</canvas>
-
-		<div id="loading">
+		<div id="over" style="display: none;">Best Score
+			<div id="bestScore"></div>
+		</div>
+		<div id="loading" class="under">
 			<div>
 			  <div>... loading ...</div>
 			  <div class="progress">
@@ -21,6 +20,14 @@
 			  </div>
 			</div>
 		  </div>
+
+		<div id="difficulty" style="display: none;" class="under">
+			<div id="choose">Choose the difficulty</div>
+			<button id="easy" class="level"> easy </button>
+			<button id="medium" class="level"> medium </button>
+			<button id="hard" class="level"> hard </button>
+		</div>
+		<div id="canvas" class="under"></div>
 
 	</body>
 

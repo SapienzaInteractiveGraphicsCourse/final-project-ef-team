@@ -9,7 +9,7 @@ const center=1;
 const right=2;
 
 let player;
-let bells = new Array(6); //Like a 2x3 matrix with each element of the form {bell: Obj, torus: Obj}
+let bells = new Array(6); //Like a 2x3 matrix
 
 
 function createBell(scene, horizontal, vertical) {

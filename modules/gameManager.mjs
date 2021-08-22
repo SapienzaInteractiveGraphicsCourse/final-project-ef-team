@@ -10,6 +10,10 @@ let sequence = [];
 let index = 0;
 let win = false;
 
+//TODO
+document.getElementById('bestScore').innerHTML = bestScore;
+// document.getElementById('bestScore').innerHTML = JSON.parse(window.localStorage.getItem('bestScore')) || 0;
+
 function playSequence() {
     for (let i=0; i<level+initialSequence; i++) {
         // const max = 6;
@@ -45,6 +49,9 @@ function checkWin() {
         level += 1;
         if(level>bestScore) {
             bestScore = level;
+            // TODO save locally
+            // window.localStorage.setItem('bestScore', JSON.stringify(bestScore));
+            document.getElementById('bestScore').innerHTML = bestScore;
             console.log('best', bestScore)
         }
 
