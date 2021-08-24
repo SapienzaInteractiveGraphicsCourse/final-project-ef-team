@@ -84,6 +84,10 @@ function start(difficulty) {
   const chooseDifficulty = document.getElementById('difficulty');
   chooseDifficulty.style.display = 'none';
 
+  //Display the life
+  const life = document.getElementById('overLife');
+  life.style.display = 'block';
+
   init(difficulty);
   onWindowResize();
 

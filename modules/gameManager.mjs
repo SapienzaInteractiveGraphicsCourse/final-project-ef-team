@@ -13,6 +13,7 @@ let win = false;
 //TODO
 document.getElementById('bestScore').innerHTML = bestScore;
 // document.getElementById('bestScore').innerHTML = JSON.parse(window.localStorage.getItem('bestScore')) || 0;
+document.getElementById('life').innerHTML = life;
 
 function playSequence() {
     for (let i=0; i<level+initialSequence; i++) {
@@ -35,6 +36,7 @@ function checkBellSequence(bell) {
         }
         else {
             life -= 1;
+            document.getElementById('life').innerHTML = life;
         }
         return false;
     }
