@@ -1,0 +1,19 @@
+#openMenu {
+    margin-top: 3%;
+}
+
+
+#popup {
+    display: none;
+    position: fixed;
+    width: 91.5%;
+    left: 4%;
+    top: 2%;
+    border: 3px solid rgba(163, 106, 255, 0.5);
+    border-radius: 3%;
+    z-index: 3;
+
+    background-color: white;
+    text-align: center;
+    font-size: xx-large;
+}

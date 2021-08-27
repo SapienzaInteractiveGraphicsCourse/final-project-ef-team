@@ -29,12 +29,11 @@ function songBell(bell) {
 
     //e accendi la lucina dentro
     bell.getObjectByName('Light').intensity = 1;
+    bell.getObjectByName("Torus_1").material.emissiveIntensity = 0.8;
     setTimeout(function() {
         bell.getObjectByName('Light').intensity = 0;
+        bell.getObjectByName("Torus_1").material.emissiveIntensity = 0;
     }, 2500);
-
-    // const light01 = new TWEEN.Tween(bell['light'].position).to({x:clapper.rotation.x+Math.PI/6}, 1000);
-    // light01.start();
 } 
 
 /*********************************************************************************************************
@@ -223,6 +222,11 @@ function climbStairs(up) {
     walkAndTurnToTarget(left, -14);
     animationTime += 5;
 
+    setTimeout(function(){
+        player.position.y *= -1;
+        player.position.z = up ? 7 : 2;
+    }, animationTime);
+
     //traslazione su/giù e movimento gambe/braccia
     const leftShoulder = player.getObjectByName('ShoulderL');
     const rightShoulder = player.getObjectByName('ShoulderR');
@@ -239,7 +243,7 @@ function climbStairs(up) {
     const rightFoot = player.getObjectByName('FootR');
 
     // leftShoulder.rotation.x = -Math.PI/4;
-    rightUpperArm.rotation.z = Math.PI;
+    // rightUpperArm.rotation.z = Math.PI;
 }
 
 export { songTime, animationTime, songBell, walk, stopWalk, climbStairs, sbra, ops }

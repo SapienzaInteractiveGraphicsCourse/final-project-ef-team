@@ -5,7 +5,7 @@ import  { player, bells, loadEasy, loadMedium, loadDifficult } from './modules/m
 import { songBell, walk } from './modules/animations.mjs';
 import { initScene, initCamera, initLights } from './modules/utils.mjs';
 
-import { startLevel } from './modules/gameManager.mjs';
+import { startGame } from './modules/gameManager.mjs';
 
 import { TWEEN } from '/three/examples/jsm/libs/tween.module.min.js'
 import { win } from './modules/gameManager.mjs';
@@ -15,8 +15,9 @@ import { win } from './modules/gameManager.mjs';
                                   INITIALIZE CANVAS    
  *********************************************************************************************************/
 let camera, scene, renderer, canvas;
+let difficulty;
 
-function init(level) {
+function init() {
     const container = document.querySelector('#canvas');
 
     //scene
@@ -28,7 +29,7 @@ function init(level) {
     //lights
     initLights(scene);
 
-    switch (level) {
+    switch (difficulty) {
       case 0:
         loadEasy(scene);
         break;
@@ -50,18 +51,10 @@ function init(level) {
     container.appendChild(canvas);
     // renderer.shadowMap.enabled = true
 
-    startLevel();
+    startGame(difficulty);
 
     window.addEventListener('resize', onWindowResize, false);
 }
-
-function onWindowResize() {
-  camera.aspect = window.innerWidth/window.innerHeight;
-  camera.updateProjectionMatrix();
-
-  renderer.setSize(window.innerWidth, window.innerHeight);
-}
-
 
 /*********************************************************************************************************
                                   RENDER    
@@ -75,29 +68,50 @@ function render() {
   requestAnimationFrame(render);
 }
 
+/*********************************************************************************************************
+                                  UTILITY FUNCTIONS
+ *********************************************************************************************************/
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
 
 /*********************************************************************************************************
                                         MAIN   
  *********************************************************************************************************/
-function start(difficulty) {
+function start() {
   //Hide the buttons
   const chooseDifficulty = document.getElementById('difficulty');
   chooseDifficulty.style.display = 'none';
+  const settings = document.getElementById('menu');
+  settings.style.display = 'none';
 
   //Display the life
   const life = document.getElementById('overLife');
   life.style.display = 'block';
 
-  init(difficulty);
+  init();
   onWindowResize();
 
   render();
 }
 
 //Buttons
-document.getElementById("easy").onclick = function() {start(0)};
-document.getElementById("medium").onclick = function() {start(1)};
-document.getElementById("hard").onclick = function() {start(2)};
+document.getElementById("easy").onclick = function() {
+  difficulty = 0;
+  start()
+};
+document.getElementById("medium").onclick = function() {
+  difficulty = 1;
+  start()
+};
+document.getElementById("hard").onclick = function() {
+  difficulty = 2;
+  start()
+};
 
 function main() {
   // Hide the loading bar
@@ -107,6 +121,9 @@ function main() {
   //Display the buttons and the best score
   const chooseDifficulty = document.getElementById('difficulty');
   chooseDifficulty.style.display = 'block';
+
+  const settings = document.getElementById('menu');
+  settings.style.display = 'block';
 
   const best = document.getElementById('over');
   best.style.display = 'block';

@@ -13,23 +13,29 @@ let bells = new Array(6); //Like a 2x3 matrix
 
 
 function createBell(scene, horizontal, vertical) {
+    // Position
     const floor = vertical ? scene.getObjectByName('FirstFloor') : scene.getObjectByName('GroundFloor');
     const x = horizontal*9.5;
     const y = 8 + vertical*2;
-
+    // Model
     let root = models['bell'].gltf.scene.clone(true).getObjectByName('RootNode');
 	root.scale.set(6.1,6.1,6.1);
-
+    // Light Color
+    const colorString = sessionStorage.getItem('color') || 'blue';
+    const color = new THREE.Color(colorString);
+    // Light
+    root.getObjectByName("Torus_1").material = root.getObjectByName("Torus_1").material.clone();
+    root.getObjectByName("Torus_1").material.emissive = color;
+    root.getObjectByName("Torus_1").material.emissiveIntensity = 0;
     // root.getObjectByName("Torus_1").material = new THREE.MeshPhongMaterial({color:'black', emissive:'blue'});
-    const light = new THREE.PointLight(0x0000FF, 0, 20, 2);
+    const light = new THREE.PointLight(color, 0, 20, 2);
     light.name = 'Light';
     light.position.x += 17;
-    const sphereSize = 15;
-    const pointLightHelper = new THREE.PointLightHelper( light, sphereSize );
-    scene.add( pointLightHelper );
+    // light.castShadow = true;
     root.getObjectByName("Torus").add(light);
 
     //TODO check dimensions
+    //Rope
     const ropeGeometry = new THREE.CylinderGeometry(0.15,0.15,5);
     const ropeTexture = textures['rope'].tex;
     ropeTexture.wrapS = THREE.RepeatWrapping;
@@ -41,6 +47,7 @@ function createBell(scene, horizontal, vertical) {
     rope.name = 'Rope';
     rope.add(ropeMesh);
 
+    // Adding to the scene
     const bell = new THREE.Object3D();
     bell.name = 'Bell';
 	bell.position.set(x-4,y-1.2,0);
@@ -49,7 +56,7 @@ function createBell(scene, horizontal, vertical) {
     bell.add(rope);
     floor.add(bell);
 
-    //Add it to the global array
+    // Adding to the global array
     bells.splice(3*vertical+horizontal, 1, bell);
 }
 
@@ -76,7 +83,7 @@ function createFloor(scene, up) {
     texture.repeat.set(repeats,1);
 
     const planeGeo = up ? new THREE.BoxGeometry(planeSize, 12, 2) : new THREE.PlaneGeometry(planeSize, 20);
-    const planeMat = new THREE.MeshPhongMaterial({ map: texture});
+    const planeMat = new THREE.MeshPhongMaterial({ map: texture });
     const mesh = new THREE.Mesh(planeGeo, planeMat);
     mesh.rotation.x = Math.PI * -.5;
 
@@ -90,11 +97,38 @@ function createFloor(scene, up) {
     scene.add(floor);
 }
 
+function createWalls(scene) {
+    const texture = textures['wall'].tex;
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    // const repeats = planeSize / 28;
+    // texture.repeat.set(repeats,1);
+    const normalMap = textures['normalwall'].tex;
+
+    const planeGeo = new THREE.PlaneGeometry(20, 30);
+    const planeMat = new THREE.MeshPhongMaterial({ map: texture, normalMap: normalMap});
+    const rightWall = new THREE.Mesh(planeGeo, planeMat);
+    const leftWall = new THREE.Mesh(planeGeo, planeMat);
+
+    rightWall.rotation.y = Math.PI * -.5;
+    rightWall.position.set(20, 10, 0);
+    leftWall.rotation.y = Math.PI * .5;
+    leftWall.position.set(-20, 10, 0);
+
+    scene.add(rightWall);
+    scene.add(leftWall);
+
+}
+
 function createLadder(scene) {
     let root = models['ladder'].gltf.clone();
     root.scale.set(0.01,0.01,0.01);
     root.rotation.y = Math.PI * -.5;
-    const mat = new THREE.MeshPhongMaterial({color:'brown'});
+    const mat = new THREE.MeshPhongMaterial({color:
+    0x843115});
+    //0x925417});
+    //0x912e17});
+    //0x422424});
     root.traverse( function( child ) {
         if ( child instanceof THREE.Mesh ) {
             child.material = mat;
@@ -108,6 +142,10 @@ function createLadder(scene) {
     scene.add(ladder);
 }
 
+/*********************************************************************************************************
+                                    CREATOR OF THE SCENE
+ *********************************************************************************************************/
+
 //Load all the basic elements
 function loadBasic(scene) {
     setUpListener();
@@ -117,6 +155,7 @@ function loadBasic(scene) {
 
     createFloor(scene, down);
     createFloor(scene, up);
+    createWalls(scene);
 
     createLadder(scene);
 

@@ -9,6 +9,7 @@ const initialSequence = 2;
 let sequence = [];
 let index = 0;
 let win = false;
+let difficulty;
 
 //TODO
 document.getElementById('bestScore').innerHTML = bestScore;
@@ -16,11 +17,42 @@ document.getElementById('bestScore').innerHTML = bestScore;
 document.getElementById('life').innerHTML = life;
 
 function playSequence() {
+    const min = 0;
+    let max;
+    switch (difficulty) {
+        case 0:
+            max = 3;
+            break;
+        case 1:
+            max = 4;
+            break;
+        case 2:
+            max = 6;
+    }
+
     for (let i=0; i<level+initialSequence; i++) {
-        // const max = 6;
-        const max = 3;
-        const min = 0;
         sequence[i] = Math.floor(Math.random() * (max - min) + min);
+        if(difficulty === 0) {  //Easy mode
+            if (sequence[i] === 1) { //It's the lower right bell
+                sequence[i] = 2;
+            }
+            else if (sequence[i] === 2) { //It's the upper one
+                sequence[i] = 4;
+            }
+        }
+        else if (difficulty === 1) {    //Medium mode
+            if (sequence[i] === 1) { //It's the lower right bell
+                sequence[i] = 2;
+            }
+            else if (sequence[i] === 2) { //It's the upper left bell
+                sequence[i] = 3;
+            }
+            else if (sequence[i] === 3) { //It's the upper right bell
+                sequence[i] = 5;
+            }
+        }
+        
+        //Hard mode doesn't require adjustments
         setTimeout(function () { songBell(bells[sequence[i]]) }, i*songTime);
     }
 }
@@ -64,7 +96,7 @@ function checkWin() {
 function loseGame() {
     level = 0;
     sequence = [];
-    console.log('perso')
+    window.location.reload();
 }
 
 function startLevel() {
@@ -77,4 +109,9 @@ function startLevel() {
     setTimeout(setUpListener, timeout);
 }
 
-export { win, startLevel, checkBellSequence }
+function startGame(customDifficulty) {
+    difficulty = customDifficulty;
+    startLevel();
+}
+
+export { win, startGame, checkBellSequence }

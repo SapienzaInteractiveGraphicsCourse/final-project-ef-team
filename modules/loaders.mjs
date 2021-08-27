@@ -11,6 +11,8 @@ const models = {
 const textures = {
     rope: {url: 'res/rope.jpg'},
     floor: {url: 'res/floor.jpg'},
+    wall: {url: 'res/wall.jpg'},
+    normalwall: {url: 'res/wallNormalMap.png'},
     back: {url: 'res/colline-sfondo-ufficiale-xp-1280x720.jpg'}
 }
 

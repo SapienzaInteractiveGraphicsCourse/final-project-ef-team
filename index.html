@@ -6,15 +6,19 @@
 		<title>Bell Ringer-Memory Game</title>
 
 		<link rel="stylesheet" type="text/css" href="index.css">
+		<link rel="stylesheet" type="text/css" href="popup.css">
 	</head>
 
 	<body>
+		<!-- Container of score and life -->
 		<div id="over" style="display: none;">Best Score
 			<div id="bestScore"></div>
 		</div>
 		<div id="overLife" style="display: none;"> LIFES
 			<div id="life"></div>
 		</div>
+
+		<!-- Progress Bar -->
 		<div id="loading" class="under">
 			<div>
 			  <div>... loading ...</div>
@@ -24,15 +28,46 @@
 			</div>
 		  </div>
 
+		<!-- Buttons to select difficulty -->
 		<div id="difficulty" style="display: none;" class="under">
-			<div id="choose">Choose the difficulty</div>
-			<button id="easy" class="level"> easy </button>
-			<button id="medium" class="level"> medium </button>
-			<button id="hard" class="level"> hard </button>
+			<h2 id="choose">Choose the difficulty</h2>
+			<button id="easy" class="btn"> easy </button>
+			<button id="medium" class="btn"> medium </button>
+			<button id="hard" class="btn"> hard </button>
 		</div>
+
+		<!-- Container where the canvas will be -->
 		<div id="canvas" class="under"></div>
+
+		<!-- Button to open the pop up menu -->
+		<div id="menu" class="under" style="display: none; text-align: center;">
+			<button id="openMenu" class="btn">settings</button>
+		</div>
+
+		<!-- Pop up menu -->
+		<div id="popup">
+			<h3>Settings</h3>
+            <div>
+                Sound Volume 0
+                <input id="SoundVolume" type="range" min="0" max="100" step="5"/>
+                100
+            </div>
+            <div>
+                Brightness 0
+                <input id="Brightness" type="range" min="0" max="100" step="5"/>
+                100
+            </div>
+			<div>
+                Bell Light Color
+                <input id="Color" type="color"/>
+            </div>
+            <div>cambia sfondo</div>
+            <div>allow or not shadows</div>
+			<button id="closeMenu" class="btn">close</button>
+		</div>
 
 	</body>
 
 	<script type="module" src="index.js"></script>
+	<script type="module" src="popup.js"></script>
 </html>

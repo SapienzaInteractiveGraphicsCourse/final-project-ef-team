@@ -37,7 +37,6 @@ function escKeyDown(event) {
 			document.location.reload();
 		}
 	}
-	
 }
 
 function onKeyUp(event) {	
@@ -79,7 +78,7 @@ function doSomething() {
 		setTimeout(setUpListener, animationTime);
     }
     else{ 
-		if (player.position.x > -8 && player.position.x < -1.5) {
+		if (player.position.x > -9.5 && player.position.x < -1.5) {
 			bell = bells[3*up];
 		}
 		else if (player.position.x > 0.7 && player.position.x < 6.3) {
