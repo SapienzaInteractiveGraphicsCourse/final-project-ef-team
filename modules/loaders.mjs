@@ -13,7 +13,9 @@ const textures = {
     floor: {url: 'res/floor.jpg'},
     wall: {url: 'res/wall.jpg'},
     normalwall: {url: 'res/wallNormalMap.png'},
-    back: {url: 'res/colline-sfondo-ufficiale-xp-1280x720.jpg'}
+    back1: {url: 'res/b1.png'},
+    back2: {url: 'res/b2.jpg'}
+
 }
 
 function loadModels(manager){
@@ -39,6 +41,8 @@ function loadTextures(manager){
 
     for (const texture of Object.values(textures)) {
         texture.tex = textureLoader.load(texture.url);
+        texture.tex.wrapS = THREE.RepeatWrapping;
+        texture.tex.wrapT = THREE.RepeatWrapping;
     }
 }
 

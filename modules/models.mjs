@@ -11,7 +11,6 @@ const right=2;
 let player;
 let bells = new Array(6); //Like a 2x3 matrix
 
-
 function createBell(scene, horizontal, vertical) {
     // Position
     const floor = vertical ? scene.getObjectByName('FirstFloor') : scene.getObjectByName('GroundFloor');
@@ -78,9 +77,8 @@ function createPlayer(scene) {
 function createFloor(scene, up) {
     const planeSize = 40;
     const texture = textures['floor'].tex;
-    texture.wrapS = THREE.RepeatWrapping;
-    const repeats = planeSize / 28;
-    texture.repeat.set(repeats,1);
+    // const repeats = planeSize / 28;
+    // texture.repeat.set(repeats,1);
 
     const planeGeo = up ? new THREE.BoxGeometry(planeSize, 12, 2) : new THREE.PlaneGeometry(planeSize, 20);
     const planeMat = new THREE.MeshPhongMaterial({ map: texture });
@@ -99,9 +97,6 @@ function createFloor(scene, up) {
 
 function createWalls(scene) {
     const texture = textures['wall'].tex;
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    // const repeats = planeSize / 28;
     // texture.repeat.set(repeats,1);
     const normalMap = textures['normalwall'].tex;
 
@@ -117,7 +112,33 @@ function createWalls(scene) {
 
     scene.add(rightWall);
     scene.add(leftWall);
+}
 
+function createBackground(scene) {
+    const choosenBack = sessionStorage.getItem('background') || 'back1';
+    const texture = textures[choosenBack].tex;
+    const planeGeo = new THREE.PlaneGeometry(40, 30);
+    const planeMat = new THREE.MeshBasicMaterial({ map: texture });
+    const back = new THREE.Mesh(planeGeo, planeMat);
+
+    back.position.set(0,10,-10);
+    scene.add(back);
+}
+
+function createBeam(scene) {
+    const texture = textures['floor'].tex;
+
+    const planeGeo = new THREE.BoxGeometry(40, 1.5, 1);
+    const planeMat = new THREE.MeshPhongMaterial({ map: texture });
+    const mesh = new THREE.Mesh(planeGeo, planeMat);
+    mesh.rotation.x = Math.PI * -.5;
+
+    const beam = new THREE.Object3D();
+    beam.name = 'Beam';
+    beam.position.set(0, 14.5, -3);
+    beam.add(mesh);
+
+    scene.add(beam);
 }
 
 function createLadder(scene) {
@@ -156,6 +177,8 @@ function loadBasic(scene) {
     createFloor(scene, down);
     createFloor(scene, up);
     createWalls(scene);
+    createBackground(scene);
+    createBeam(scene);
 
     createLadder(scene);
 
