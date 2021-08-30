@@ -1,6 +1,6 @@
 import { songTime, animationTime, songBell, walk, stopWalk, climbStairs, sbra, ops } from './animations.mjs';
 import  { player, bells } from './models.mjs';
-import { win, checkBellSequence } from './gameManager.mjs';
+import { win, userSing } from './gameManager.mjs';
 
 let lastKey = 0;
 
@@ -70,37 +70,12 @@ function customKeyUp(event) {
 function doSomething() {
 	stopInteraction();
 
-    const up = (player.position.y === 5);
-	let bell;
-
     if (player.position.x < -10){
-        climbStairs(up);
+        climbStairs(player.position.y === 5);
 		setTimeout(setUpListener, animationTime);
     }
     else{ 
-		if (player.position.x > -9.5 && player.position.x < -1.5) {
-			bell = bells[3*up];
-		}
-		else if (player.position.x > 0.7 && player.position.x < 6.3) {
-			bell = bells[3*up+1];
-		}
-		else if (player.position.x > 7.5) {
-			bell = bells[3*up+2];
-		}
-
-		if(bell) {
-			const rightBell = checkBellSequence(bell);
-			if(rightBell) {
-				sbra(bell);
-				if(!win) {
-					setTimeout(setUpListener, songTime+animationTime);
-				}
-			}
-			else {
-				ops();
-				setTimeout(setUpListener, animationTime);
-			}
-		}
+		userSing();
 	}
 
 }

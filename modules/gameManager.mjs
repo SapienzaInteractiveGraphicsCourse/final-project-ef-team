@@ -1,5 +1,5 @@
-import { bells } from './models.mjs';
-import { songTime, songBell } from './animations.mjs';
+import { player, bells } from './models.mjs';
+import { songTime, animationTime, songBell, walk, stopWalk, climbStairs, sbra, ops } from './animations.mjs';
 import { stopInteraction, setUpListener } from './userInteraction.mjs'
 
 let life = 3;
@@ -54,6 +54,81 @@ function playSequence() {
         
         //Hard mode doesn't require adjustments
         setTimeout(function () { songBell(bells[sequence[i]]) }, i*songTime);
+    }
+}
+
+function userSing() {
+	let bell = undefined;
+    const up = (player.position.y === 5);
+
+    switch (difficulty) {
+        case 0: //EASY mode
+            if(!up){
+                if(player.position.x > -8.5 && player.position.x < 2){
+                    bell = bells[0];
+                }
+                else if (player.position.x > 7 && player.position.x < 19) {
+                    bell = bells[2];
+                }
+            }
+            else {
+                if(player.position.x > -3 && player.position.x < 11.5){
+                    bell = bells[4];
+                }
+            }
+            break;
+
+        case 1: //MEDIUM mode
+            if (player.position.x > -8.5 && player.position.x < 1.5) {
+                bell = bells[3*up];
+            }
+            else if (player.position.x > 7 && player.position.x < 19) {
+                bell = bells[3*up+2];
+            }
+            break;
+
+        case 2: //HARD mode
+            if(!up){
+                if(player.position.x > -8.5 && player.position.x < -1){
+                    bell = bells[0];
+                }
+                else if (player.position.x > 0 && player.position.x < 6.5) {
+                    bell = bells[1];
+                }
+                else if (player.position.x > 7 && player.position.x < 19) {
+                    bell = bells[2];
+                }
+            }
+            else {
+                if(player.position.x > -8.5 && player.position.x < -1){
+                    bell = bells[3];
+                }
+                else if (player.position.x > 1 && player.position.x < 7.5) {
+                    bell = bells[4];
+                }
+                else if (player.position.x > 9 && player.position.x < 19) {
+                    bell = bells[5];
+                }
+            }
+            break;
+    }
+
+    if(bell) {
+        const rightBell = checkBellSequence(bell);
+        if(rightBell) {
+            sbra(bell);
+            if(!win) {
+                setTimeout(setUpListener, songTime+animationTime);
+            }
+        }
+        else {
+            ops();
+            setTimeout(setUpListener, animationTime);
+        }
+    }
+
+    else {
+        setUpListener();
     }
 }
 
@@ -114,4 +189,4 @@ function startGame(customDifficulty) {
     startLevel();
 }
 
-export { win, startGame, checkBellSequence }
+export { win, startGame, userSing }
