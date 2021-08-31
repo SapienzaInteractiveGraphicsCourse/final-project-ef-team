@@ -11,11 +11,11 @@ let index = 0;
 let win = false;
 let difficulty;
 
-//TODO
-document.getElementById('bestScore').innerHTML = bestScore;
-// document.getElementById('bestScore').innerHTML = JSON.parse(window.localStorage.getItem('bestScore')) || 0;
+document.getElementById('bestScore').innerHTML = JSON.parse(window.localStorage.getItem('bestScore')) || 0;
 document.getElementById('life').innerHTML = life;
 
+
+/******************* FUNCTION TO PLAY THE BELLS AUTONOMOUSLY *******************/
 function playSequence() {
     const min = 0;
     let max;
@@ -57,6 +57,7 @@ function playSequence() {
     }
 }
 
+/******************* FUNCTION TO MAKE THE USER TO PLAY THE BELLS *******************/
 function userSing() {
 	let bell = undefined;
     const up = (player.position.y === 5);
@@ -114,16 +115,26 @@ function userSing() {
     }
 
     if(bell) {
-        const rightBell = checkBellSequence(bell);
-        if(rightBell) {
+        const isTheRightBell = (bell === bells[sequence[index]]);
+        if(isTheRightBell) {
+            index += 1;
             sbra(bell);
+            checkWin();
+
             if(!win) {
                 setTimeout(setUpListener, songTime+animationTime);
             }
         }
         else {
-            ops();
-            setTimeout(setUpListener, animationTime);
+            if(life === 1) {
+                loseGame();
+            }
+            else {
+                ops();
+                life -= 1;
+                document.getElementById('life').innerHTML = life;
+                setTimeout(setUpListener, animationTime);
+            }
         }
     }
 
@@ -132,48 +143,32 @@ function userSing() {
     }
 }
 
-function checkBellSequence(bell) {
-    const rightBell = (bell === bells[sequence[index]]);
-    if(rightBell) {
-        index += 1;
-    }
-    else {
-        if(life === 1) {
-            loseGame();
-        }
-        else {
-            life -= 1;
-            document.getElementById('life').innerHTML = life;
-        }
-        return false;
-    }
-
-    checkWin();
-    return true;
-}
-
+/******************* FUNCTION TO CHECK IF THE SEQUENCE HAS BEEN COMPLETED *******************/
 function checkWin() {
     if ( index === level+initialSequence ) {
         win = true;
         level += 1;
         if(level>bestScore) {
             bestScore = level;
-            // TODO save locally
-            // window.localStorage.setItem('bestScore', JSON.stringify(bestScore));
-            document.getElementById('bestScore').innerHTML = bestScore;
-            console.log('best', bestScore)
+            window.localStorage.setItem('bestScore', JSON.stringify(bestScore));
         }
 
-        setTimeout(startLevel, songTime);
+        setTimeout(function() {
+            window.alert("Press OK to start a new level!");
+            document.getElementById('bestScore').innerHTML = bestScore;
+            startLevel()}, songTime+animationTime);
     }
 }
 
+/******************* FUNCTION TO SET THE END OF THE GAME *******************/
 function loseGame() {
     level = 0;
     sequence = [];
+    window.alert("You've lost the game!");
     window.location.reload();
 }
 
+/******************* FUNCTION TO START A NEW LEVEL *******************/
 function startLevel() {
     index = 0;
     win = false;
@@ -184,6 +179,7 @@ function startLevel() {
     setTimeout(setUpListener, timeout);
 }
 
+/******************* FUNCTION TO START THE GAME *******************/
 function startGame(customDifficulty) {
     difficulty = customDifficulty;
     startLevel();
