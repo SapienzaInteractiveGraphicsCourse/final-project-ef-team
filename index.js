@@ -24,6 +24,7 @@ function init() {
     scene = initScene();
 
     //camera
+    //TODO la faccio dopo la canvas
     // camera = initCamera();
 
     //lights
@@ -45,11 +46,15 @@ function init() {
     renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setPixelRatio(window.devicePixelRatio);
 
+    const shadowsEnabled = sessionStorage.getItem('shadows') || "true";
+    if(shadowsEnabled === "true") {
+      renderer.shadowMap.enabled = true;
+    }
+
     canvas = renderer.domElement;
     camera = initCamera(canvas);
 
     container.appendChild(canvas);
-    // renderer.shadowMap.enabled = true
 
     startGame(difficulty);
 

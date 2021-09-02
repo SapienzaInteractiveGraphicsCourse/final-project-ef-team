@@ -14,9 +14,14 @@ function open() {
                                         SETTINGS
  *********************************************************************************************************/
 function setUp() {
-    document.getElementById("SoundVolume").value = 30;
-    document.getElementById("Brightness").value = 100;
+    document.getElementById("SoundVolume").value = sessionStorage.getItem('volume') || 30;
+
+    const brightness = parseInt(sessionStorage.getItem('brightness'));
+    document.getElementById("Brightness").value = brightness || 100;
+    document.body.setAttribute("style", "filter: brightness("+brightness+"%);");
+
     document.getElementById("Color").value = sessionStorage.getItem('color') || "#0000ff";
+
     if(sessionStorage.getItem('background') == 'back2') {
         document.getElementById("b1").style = 'border: 3px solid rgb(255, 255, 255);'
         document.getElementById("b2").style = 'border: 3px solid rgb(52, 51, 133);'
@@ -24,6 +29,14 @@ function setUp() {
     else {
         document.getElementById("b1").style = 'border: 3px solid rgb(52, 51, 133);'
         document.getElementById("b2").style = 'border: 3px solid rgb(255, 255, 255);'   
+    }
+
+    const shadowsEnabled = sessionStorage.getItem('shadows') || "true";
+    if ( shadowsEnabled == "true"){
+        document.getElementById("shadows").checked = true;
+    }
+    else {
+        document.getElementById("shadows").checked = false;
     }
 }
 
@@ -33,6 +46,7 @@ document.getElementById("SoundVolume").oninput = function(){
     window.sessionStorage.setItem('volume', event.target.value);
 };
 document.getElementById("Brightness").oninput = function(){
+    window.sessionStorage.setItem('brightness', event.target.value);
     const brightness = parseInt(event.target.value);
     document.body.setAttribute("style", "filter: brightness("+brightness+"%);");
 };
@@ -48,4 +62,12 @@ document.getElementById("b2").onclick = function() {
     window.sessionStorage.setItem('background', 'back2');
     document.getElementById("b1").style = 'border: 3px solid rgb(255, 255, 255);'
     document.getElementById("b2").style = 'border: 3px solid rgb(52, 51, 133);'
+};
+document.getElementById("shadows").onchange = function() {
+    if (event.target.checked == true){
+        window.sessionStorage.setItem('shadows', "true");
+    }
+    else {
+        window.sessionStorage.setItem('shadows', "false");
+    }
 };

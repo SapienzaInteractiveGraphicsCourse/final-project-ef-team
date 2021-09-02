@@ -26,11 +26,9 @@ function createBell(scene, horizontal, vertical) {
     root.getObjectByName("Torus_1").material = root.getObjectByName("Torus_1").material.clone();
     root.getObjectByName("Torus_1").material.emissive = color;
     root.getObjectByName("Torus_1").material.emissiveIntensity = 0;
-    // root.getObjectByName("Torus_1").material = new THREE.MeshPhongMaterial({color:'black', emissive:'blue'});
     const light = new THREE.PointLight(color, 0, 20, 2);
     light.name = 'Light';
     light.position.x += 17;
-    // light.castShadow = true;
     root.getObjectByName("Torus").add(light);
 
     //TODO check dimensions
@@ -45,6 +43,14 @@ function createBell(scene, horizontal, vertical) {
     const rope = new THREE.Object3D();
     rope.name = 'Rope';
     rope.add(ropeMesh);
+
+    // Shadows
+    root.traverse( function( child ) {
+        if ( child instanceof THREE.Mesh ) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+        }
+    } );
 
     // Adding to the scene
     const bell = new THREE.Object3D();
@@ -71,6 +77,14 @@ function createPlayer(scene) {
     root.getObjectByName('UpperArmR').rotation.y = Math.PI/12;
     root.getObjectByName('UpperArmL').rotation.y = -Math.PI/12;
 
+    // Shadows
+    root.traverse( function( child ) {
+        if ( child instanceof THREE.Mesh ) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+        }
+    } );
+
     scene.add(root);
 }
 
@@ -80,10 +94,20 @@ function createFloor(scene, up) {
     // const repeats = planeSize / 28;
     // texture.repeat.set(repeats,1);
 
-    const planeGeo = up ? new THREE.BoxGeometry(planeSize, 12, 2) : new THREE.PlaneGeometry(planeSize, 20);
+    const planeGeo = up ? new THREE.BoxGeometry(planeSize, 14, 2) : new THREE.PlaneGeometry(planeSize, 20);
     const planeMat = new THREE.MeshPhongMaterial({ map: texture });
     const mesh = new THREE.Mesh(planeGeo, planeMat);
     mesh.rotation.x = Math.PI * -.5;
+
+    // Shadows
+    if(up) {
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+    }
+    else {
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+    }
 
     const floor = new THREE.Object3D();
     floor.name = up ? 'FirstFloor' : 'GroundFloor';
@@ -101,7 +125,9 @@ function createWalls(scene) {
     const normalMap = textures['normalwall'].tex;
 
     const planeGeo = new THREE.PlaneGeometry(20, 30);
-    const planeMat = new THREE.MeshPhongMaterial({ map: texture, normalMap: normalMap});
+    // const planeMat = new THREE.MeshPhongMaterial({ map: texture, normalMap: normalMap });
+    const planeMat = new THREE.MeshStandardMaterial({ map: texture, normalMap: normalMap });
+    // const planeMat = new THREE.MeshStandardMaterial({ color:'pink' });
     const rightWall = new THREE.Mesh(planeGeo, planeMat);
     const leftWall = new THREE.Mesh(planeGeo, planeMat);
 
@@ -110,19 +136,32 @@ function createWalls(scene) {
     leftWall.rotation.y = Math.PI * .5;
     leftWall.position.set(-20, 10, 0);
 
-    scene.add(rightWall);
-    scene.add(leftWall);
+    // Shadows
+    rightWall.castShadow = true;
+    rightWall.receiveShadow = true;
+    leftWall.castShadow = true;
+    leftWall.receiveShadow = true;
+
+    const walls = new THREE.Object3D();
+    walls.name = 'Walls';
+    walls.add(rightWall);
+    walls.add(leftWall);
+    scene.add(walls);
 }
 
 function createBackground(scene) {
     const choosenBack = sessionStorage.getItem('background') || 'back1';
     const texture = textures[choosenBack].tex;
     const planeGeo = new THREE.PlaneGeometry(40, 30);
-    const planeMat = new THREE.MeshBasicMaterial({ map: texture });
-    const back = new THREE.Mesh(planeGeo, planeMat);
+    const planeMat = new THREE.MeshPhongMaterial({ map: texture });
+    const mesh = new THREE.Mesh(planeGeo, planeMat);
 
-    back.position.set(0,10,-10);
-    scene.add(back);
+    // Shadows
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+
+    mesh.position.set(0,10,-10);
+    scene.add(mesh);
 }
 
 function createBeam(scene) {
@@ -133,12 +172,14 @@ function createBeam(scene) {
     const mesh = new THREE.Mesh(planeGeo, planeMat);
     mesh.rotation.x = Math.PI * -.5;
 
-    const beam = new THREE.Object3D();
-    beam.name = 'Beam';
-    beam.position.set(0, 14.5, -3);
-    beam.add(mesh);
+    // Shadows
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
 
-    scene.add(beam);
+    mesh.position.set(0,10.5,0);
+
+    const floor = scene.getObjectByName('FirstFloor');
+    floor.add(mesh);
 }
 
 function createLadder(scene) {
@@ -153,12 +194,14 @@ function createLadder(scene) {
     root.traverse( function( child ) {
         if ( child instanceof THREE.Mesh ) {
             child.material = mat;
+            child.castShadow = true;
+            child.receiveShadow = true;
         }
     } );
 
     const ladder = new THREE.Object3D();
     ladder.name = 'Ladder';
-    ladder.position.set(-14,-5,5);
+    ladder.position.set(-14,-5,6);
     ladder.add(root);
     scene.add(ladder);
 }
@@ -171,8 +214,7 @@ function createLadder(scene) {
 function loadBasic(scene) {
     setUpListener();
 
-    scene.background = new THREE.Color('white');
-    // scene.background = textures['back'].tex;
+    scene.background = new THREE.Color('black');
 
     createFloor(scene, down);
     createFloor(scene, up);
