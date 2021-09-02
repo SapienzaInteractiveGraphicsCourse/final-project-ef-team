@@ -1,4 +1,4 @@
-import * as THREE from '/three/build/three.module.js';
+import * as THREE from '../three/build/three.module.js';
 import { models, textures } from './loaders.mjs';
 import { setUpListener } from './userInteraction.mjs';
 

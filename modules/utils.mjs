@@ -1,5 +1,5 @@
-import * as THREE from '/three/build/three.module.js';
-import {OrbitControls} from '/three/examples/jsm/controls/OrbitControls.js';
+import * as THREE from '../three/build/three.module.js';
+import {OrbitControls} from '../three/examples/jsm/controls/OrbitControls.js';
 
 function initScene() {
     return new THREE.Scene();

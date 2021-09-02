@@ -1,5 +1,5 @@
-import * as THREE from '/three/build/three.module.js';
-import { TWEEN } from '/three/examples/jsm/libs/tween.module.min.js'
+import * as THREE from '../three/build/three.module.js';
+import { TWEEN } from '../three/examples/jsm/libs/tween.module.min.js'
 import  { player, bells } from './models.mjs'
 
 /*********************************************************************************************************
