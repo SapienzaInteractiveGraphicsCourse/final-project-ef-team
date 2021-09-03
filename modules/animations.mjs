@@ -1,6 +1,6 @@
 import * as THREE from '../three/build/three.module.js';
 import { TWEEN } from '../three/examples/jsm/libs/tween.module.min.js'
-import  { scene, player, bells } from './models.mjs'
+import  { player, bells } from './models.mjs'
 import { camera } from './utils.mjs'
 
 /*********************************************************************************************************
