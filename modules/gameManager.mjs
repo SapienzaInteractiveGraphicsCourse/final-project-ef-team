@@ -3,7 +3,6 @@ import { songTime, animationTime, songBell, walk, stopWalk, climbStairs, sbra, o
 import { stopInteraction, setUpListener } from './userInteraction.mjs'
 
 let life = 3;
-let bestScore = 0;
 let level = 0;
 const initialSequence = 2;
 let sequence = [];
@@ -11,7 +10,8 @@ let index = 0;
 let win = false;
 let difficulty;
 
-document.getElementById('bestScore').innerHTML = JSON.parse(window.localStorage.getItem('bestScore')) || 0;
+let bestScore = JSON.parse(window.localStorage.getItem('bestScore')) || 0;
+document.getElementById('bestScore').innerHTML = bestScore;
 document.getElementById('life').innerHTML = life;
 
 
@@ -53,7 +53,17 @@ function playSequence() {
         }
         
         //Hard mode doesn't require adjustments
-        setTimeout(function () { songBell(bells[sequence[i]]) }, i*songTime);
+        //Added because of a firefox bug
+        if (navigator.userAgent.includes('Firefox')) {
+            setTimeout(function () {
+                songBell(bells[sequence[i]]);
+            }, i*songTime + songTime);
+        }
+        else {
+            setTimeout(function () {
+                songBell(bells[sequence[i]]);
+            }, i*songTime);
+        }
     }
 }
 
@@ -174,8 +184,17 @@ function startLevel() {
     win = false;
 
     stopInteraction();
-    setTimeout(playSequence, 500);
-    const timeout = songTime * (level+initialSequence);
+
+    let timeout;
+    if (navigator.userAgent.includes('Firefox')) {
+        playSequence();
+        timeout = songTime * (level+initialSequence) + 2500;
+    }
+    else {
+        setTimeout(playSequence, 500);
+        timeout = songTime * (level+initialSequence) + 500;
+    }
+
     setTimeout(setUpListener, timeout);
 }
 
