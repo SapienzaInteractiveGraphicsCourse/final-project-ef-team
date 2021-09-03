@@ -1,6 +1,6 @@
-import { songTime, animationTime, songBell, walk, stopWalk, climbStairs, sbra, ops } from './animations.mjs';
-import  { player, bells } from './models.mjs';
-import { win, userSing } from './gameManager.mjs';
+import { animationTime, walk, stopWalk, climbStairs } from './animations.mjs';
+import  { player } from './models.mjs';
+import { userSing } from './gameManager.mjs';
 
 let lastKey = 0;
 

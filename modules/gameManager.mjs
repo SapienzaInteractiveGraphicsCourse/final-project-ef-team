@@ -1,5 +1,5 @@
 import { player, bells } from './models.mjs';
-import { songTime, animationTime, songBell, walk, stopWalk, climbStairs, sbra, ops } from './animations.mjs';
+import { songTime, animationTime, songBell, sbra, ops } from './animations.mjs';
 import { stopInteraction, setUpListener } from './userInteraction.mjs'
 
 let life = 3;

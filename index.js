@@ -1,15 +1,12 @@
 import * as THREE from './three/build/three.module.js';
+import { TWEEN } from './three/examples/jsm/libs/tween.module.min.js'
 
 import { loadResources } from './modules/loaders.mjs';
-import  { player, bells, loadEasy, loadMedium, loadDifficult } from './modules/models.mjs'
-import { moveCamera, walk, ops, sbra, climbStairs } from './modules/animations.mjs';
+import  { loadEasy, loadMedium, loadDifficult } from './modules/models.mjs'
+import { sbra, climbStairs } from './modules/animations.mjs';
 import { camera, initScene, initCamera, initLights } from './modules/utils.mjs';
 import { initAudio } from './modules/audio.mjs';
 import { startGame } from './modules/gameManager.mjs';
-
-import { TWEEN } from './three/examples/jsm/libs/tween.module.min.js'
-import { win } from './modules/gameManager.mjs';
-
 
 /*********************************************************************************************************
                                   INITIALIZE CANVAS    
@@ -24,8 +21,10 @@ function init() {
     scene = initScene();
 
     //camera
-    //TODO la faccio dopo la canvas
-    // camera = initCamera();
+    initCamera();
+
+    //audio
+    initAudio(camera, scene);
 
     //lights
     initLights(scene);
@@ -52,10 +51,6 @@ function init() {
     }
 
     canvas = renderer.domElement;
-    initCamera(canvas);
-
-    //audio
-    initAudio(camera, scene);
 
     container.appendChild(canvas);
 

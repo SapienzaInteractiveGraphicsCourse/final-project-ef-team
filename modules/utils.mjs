@@ -1,22 +1,15 @@
 import * as THREE from '../three/build/three.module.js';
-import {OrbitControls} from '../three/examples/jsm/controls/OrbitControls.js';
 
 function initScene() {
     return new THREE.Scene();
 }
 
-//TODO remove canvas
 let camera;
-function initCamera(canvas){
+function initCamera(){
     //fov, aspect, near, far
     camera = new THREE.PerspectiveCamera(45, 2, 0.1, 100);
-    //TODO set the camera in the right position
     camera.position.set(0,5,32);
     camera.lookAt(0,5,0);
-
-    // const controls = new OrbitControls(camera, canvas);
-    // controls.target.set(0, 5, 0);
-    // controls.update();
 }
 
 function initLights(scene) {
