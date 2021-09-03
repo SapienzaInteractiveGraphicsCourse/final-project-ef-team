@@ -1,4 +1,4 @@
-import * as THREE from '../three/build/three.module.js';
+import * as THREE from './three/build/three.module.js';
 
 import { loadResources } from './modules/loaders.mjs';
 import  { player, bells, loadEasy, loadMedium, loadDifficult } from './modules/models.mjs'
@@ -7,7 +7,7 @@ import { initScene, initCamera, initLights } from './modules/utils.mjs';
 
 import { startGame } from './modules/gameManager.mjs';
 
-import { TWEEN } from '../three/examples/jsm/libs/tween.module.min.js'
+import { TWEEN } from './three/examples/jsm/libs/tween.module.min.js'
 import { win } from './modules/gameManager.mjs';
 
 
