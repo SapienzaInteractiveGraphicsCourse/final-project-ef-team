@@ -31,8 +31,8 @@ function onKeyDown(event) {
 }
 
 function escKeyDown(event) {
+	event.preventDefault();
 	if(event.keyCode === 27) { //Escape
-		event.preventDefault();
 		if(window.confirm("Do you really want to exit?")) {
 			document.location.reload();
 		}
