@@ -2,6 +2,7 @@ import * as THREE from '../three/build/three.module.js';
 import { TWEEN } from '../three/examples/jsm/libs/tween.module.min.js'
 import  { player, bells } from './models.mjs'
 import { camera } from './utils.mjs'
+import { playAudio } from './audio.mjs'
 
 /*********************************************************************************************************
                                         CAMERA   
@@ -49,6 +50,9 @@ function songBell(bell) {
         bell.getObjectByName('Light').intensity = 0;
         bell.getObjectByName("Torus_1").material.emissiveIntensity = 0;
     }, 2500);
+
+    //e suona
+    setTimeout(playAudio, 1000);
 } 
 
 /*********************************************************************************************************

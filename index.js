@@ -4,7 +4,7 @@ import { loadResources } from './modules/loaders.mjs';
 import  { player, bells, loadEasy, loadMedium, loadDifficult } from './modules/models.mjs'
 import { moveCamera, walk, ops, sbra, climbStairs } from './modules/animations.mjs';
 import { camera, initScene, initCamera, initLights } from './modules/utils.mjs';
-
+import { initAudio } from './modules/audio.mjs';
 import { startGame } from './modules/gameManager.mjs';
 
 import { TWEEN } from './three/examples/jsm/libs/tween.module.min.js'
@@ -53,6 +53,9 @@ function init() {
 
     canvas = renderer.domElement;
     initCamera(canvas);
+
+    //audio
+    initAudio(camera, scene);
 
     container.appendChild(canvas);
 

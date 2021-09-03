@@ -14,7 +14,7 @@ function open() {
                                         SETTINGS
  *********************************************************************************************************/
 function setUp() {
-    document.getElementById("SoundVolume").value = sessionStorage.getItem('volume') || 30;
+    document.getElementById("SoundVolume").value = sessionStorage.getItem('volume') || 50;
 
     const brightness = parseInt(sessionStorage.getItem('brightness'));
     document.getElementById("Brightness").value = brightness || 100;

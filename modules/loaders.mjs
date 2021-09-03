@@ -18,6 +18,9 @@ const textures = {
 
 }
 
+let audio;
+let audioListener;
+
 function loadModels(manager){
     const gltfLoader = new GLTFLoader(manager);
     const objLoader = new OBJLoader(manager);
@@ -46,9 +49,20 @@ function loadTextures(manager){
     }
 }
 
+function loadAudio(manager) {
+    audioListener = new THREE.AudioListener();
+    audio = new THREE.Audio(audioListener);
+
+    const audioLoader = new THREE.AudioLoader(manager);
+    audioLoader.load('res/church-bell.mp3', function(buffer) {
+        audio.setBuffer(buffer);
+    });
+}
+
 function loadResources(manager) {
     loadModels(manager);
     loadTextures(manager);
+    loadAudio(manager);
 }
 
-export { models, textures, loadResources }
+export { audio, audioListener, models, textures, loadResources }
