@@ -183,16 +183,17 @@ function stopWalk(front=true) {
 
 function walkAndTurnToTarget(left, targetX, tagetZ){
     //Walk until the right x
-    walk(left, targetX);
+    walk(left, targetX);    //This set walkTime
     //Turn backward
     player.rotation.y = left ? -Math.PI/2 : Math.PI/2;
     const rotation = left ? -Math.PI : Math.PI;
     new TWEEN.Tween(player.rotation).to({y:rotation}, 200).delay(walkTime).start();
     //timeout instead of onComplete for a timing reason
+
     animationTime = walkTime+200;
-    setTimeout(function()
-    { player.rotation.y = left ? -Math.PI : Math.PI;
-    stopWalk(false);},
+    setTimeout(function() {
+        player.rotation.y = left ? -Math.PI : Math.PI;
+        stopWalk(false);},
     animationTime);
 
     //Walk until the right z
@@ -202,7 +203,7 @@ function sbra(bell) {
     const rope = bell.position.x - 4;
     //Walk to reach the rope
     const left = player.position.x > rope ? true : false;
-    walkAndTurnToTarget(left, rope);
+    walkAndTurnToTarget(left, rope);    //This set animationTime
     animationTime += 5;
 
     //traslazione giù e poi su
@@ -211,7 +212,28 @@ function sbra(bell) {
 }
 
 function ops() {
-    console.log('ooo')
+    animationTime = 3300;
+    const neck = player.getObjectByName('Neck');
+
+    //Down head
+    const up00 = new TWEEN.Tween(neck.rotation).to({x:Math.PI/6}, 500);
+    const up01 = new TWEEN.Tween(neck.rotation).to({x:Math.PI/6}, 2300);
+    const up02 = new TWEEN.Tween(neck.rotation).to({x:0}, 500);
+
+    //Lateral head
+    const n01 = new TWEEN.Tween(neck.rotation).to({y:Math.PI/6}, 800);
+    const n02 = new TWEEN.Tween(neck.rotation).to({y:-Math.PI/6}, 1000);
+    const n03 = new TWEEN.Tween(neck.rotation).to({y:Math.PI/6}, 1000);
+    const n04 = new TWEEN.Tween(neck.rotation).to({y:0}, 500);
+
+    up00.chain(up01);
+    up01.chain(up02);
+    n01.chain(n02);
+    n02.chain(n03);
+    n03.chain(n04);
+
+    up00.start();
+    n01.start();
 }
 
 function climbStairs(up) {
@@ -219,7 +241,7 @@ function climbStairs(up) {
 
     //Walk to reach the ladder
     const left = player.position.x > -14 ? true : false;
-    walkAndTurnToTarget(left, -14);
+    walkAndTurnToTarget(left, -14); //This set animationTime
     animationTime += 5;
 
     setTimeout(function(){
