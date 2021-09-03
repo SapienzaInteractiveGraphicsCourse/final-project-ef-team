@@ -13,8 +13,8 @@ const textures = {
     floor: {url: 'res/floor.jpg'},
     wall: {url: 'res/wall.jpg'},
     normalwall: {url: 'res/wallNormalMap.png'},
-    back1: {url: 'res/b1.png'},
-    back2: {url: 'res/b2.jpg'}
+    back1: {url: 'res/b1.PNG'},
+    back2: {url: 'res/b2.JPG'}
 
 }
 
