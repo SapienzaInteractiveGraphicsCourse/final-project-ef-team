@@ -2,8 +2,8 @@ import * as THREE from './three/build/three.module.js';
 
 import { loadResources } from './modules/loaders.mjs';
 import  { player, bells, loadEasy, loadMedium, loadDifficult } from './modules/models.mjs'
-import { songBell, walk } from './modules/animations.mjs';
-import { initScene, initCamera, initLights } from './modules/utils.mjs';
+import { moveCamera, walk, ops, sbra, climbStairs } from './modules/animations.mjs';
+import { camera, initScene, initCamera, initLights } from './modules/utils.mjs';
 
 import { startGame } from './modules/gameManager.mjs';
 
@@ -14,7 +14,7 @@ import { win } from './modules/gameManager.mjs';
 /*********************************************************************************************************
                                   INITIALIZE CANVAS    
  *********************************************************************************************************/
-let camera, scene, renderer, canvas;
+let scene, renderer, canvas;
 let difficulty;
 
 function init() {
@@ -52,7 +52,7 @@ function init() {
     }
 
     canvas = renderer.domElement;
-    camera = initCamera(canvas);
+    initCamera(canvas);
 
     container.appendChild(canvas);
 

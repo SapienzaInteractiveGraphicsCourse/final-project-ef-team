@@ -1,6 +1,21 @@
 import * as THREE from '../three/build/three.module.js';
 import { TWEEN } from '../three/examples/jsm/libs/tween.module.min.js'
-import  { player, bells } from './models.mjs'
+import  { scene, player, bells } from './models.mjs'
+import { camera } from './utils.mjs'
+
+/*********************************************************************************************************
+                                        CAMERA   
+ *********************************************************************************************************/
+function moveCamera(inside) {
+    if(inside) {
+        new TWEEN.Tween(camera.position).to({x:player.position.x, y:player.position.y+3, z:15}, 500).start();
+
+    }
+    else {
+        new TWEEN.Tween(camera.position).to({x:0, y:5, z:32}, 500).start();
+    }
+    
+}
 
 /*********************************************************************************************************
                                         BELL   
@@ -213,6 +228,9 @@ function sbra(bell) {
 
 function ops() {
     animationTime = 3300;
+    moveCamera(true);
+    setTimeout(function() {moveCamera(false);}, animationTime);
+
     const neck = player.getObjectByName('Neck');
 
     //Down head
@@ -268,5 +286,5 @@ function climbStairs(up) {
     // rightUpperArm.rotation.z = Math.PI;
 }
 
-export { songTime, animationTime, songBell, walk, stopWalk, climbStairs, sbra, ops }
+export { songTime, animationTime, songBell, walk, stopWalk, climbStairs, sbra, ops, moveCamera }
 

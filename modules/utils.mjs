@@ -6,18 +6,17 @@ function initScene() {
 }
 
 //TODO remove canvas
+let camera;
 function initCamera(canvas){
     //fov, aspect, near, far
-    const camera = new THREE.PerspectiveCamera(45, 2, 0.1, 100);
+    camera = new THREE.PerspectiveCamera(45, 2, 0.1, 100);
     //TODO set the camera in the right position
     camera.position.set(0,5,32);
-    // camera.lookAt(0,0,0);
+    camera.lookAt(0,5,0);
 
-    const controls = new OrbitControls(camera, canvas);
-    controls.target.set(0, 5, 0);
-    controls.update();
-
-    return camera;
+    // const controls = new OrbitControls(camera, canvas);
+    // controls.target.set(0, 5, 0);
+    // controls.update();
 }
 
 function initLights(scene) {
@@ -61,4 +60,4 @@ function addLight(obj) {
     return light;
 }
 
-export { initScene, initCamera, initLights }
+export { camera, initScene, initCamera, initLights }
