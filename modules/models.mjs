@@ -20,7 +20,7 @@ function createBell(scene, horizontal, vertical) {
     let root = models['bell'].gltf.scene.clone(true).getObjectByName('RootNode');
 	root.scale.set(6.1,6.1,6.1);
     // Light Color
-    const colorString = sessionStorage.getItem('color') || 'blue';
+    const colorString = sessionStorage.getItem('color') || 'yellow';
     const color = new THREE.Color(colorString);
     // Light
     root.getObjectByName("Torus_1").material = root.getObjectByName("Torus_1").material.clone();

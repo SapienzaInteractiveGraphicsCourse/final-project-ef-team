@@ -20,7 +20,7 @@ function setUp() {
     document.getElementById("Brightness").value = brightness || 100;
     document.body.setAttribute("style", "filter: brightness("+brightness+"%);");
 
-    document.getElementById("Color").value = sessionStorage.getItem('color') || "#0000ff";
+    document.getElementById("Color").value = sessionStorage.getItem('color') || "#ffff00";
 
     if(sessionStorage.getItem('background') == 'back2') {
         document.getElementById("b1").style = 'border: 3px solid rgb(255, 255, 255);'
