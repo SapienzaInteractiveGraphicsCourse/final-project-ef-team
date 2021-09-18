@@ -1,4 +1,5 @@
 import { TWEEN } from '../three/examples/jsm/libs/tween.module.min.js'
+
 import  { player } from './models.mjs'
 import { camera } from './utils.mjs'
 import { playAudio } from './audio.mjs'
@@ -65,13 +66,12 @@ let animationTime;
 function walk(left, target) {
     const leftUpperArm = player.getObjectByName('UpperArmL');
     const rightUpperArm = player.getObjectByName('UpperArmR');
-    const leftLowerArm = player.getObjectByName('LowerArmL');
-    const rightLowerArm = player.getObjectByName('LowerArmR');
 
     const leftUpperLeg = player.getObjectByName('UpperLegL');
     const rightUpperLeg = player.getObjectByName('UpperLegR');
     const leftLowerLeg = player.getObjectByName('LowerLegL');;
     const rightLowerLeg = player.getObjectByName('LowerLegR');
+
     const leftFoot = player.getObjectByName('FootL');
     const rightFoot = player.getObjectByName('FootR');
 
@@ -179,10 +179,24 @@ function walk(left, target) {
     }
 }
 
+function walkAndTurnToTarget(left, targetX){
+    //Walk until the right x
+    walk(left, targetX);    //This set walkTime
+    //Turn backward
+    player.rotation.y = left ? -Math.PI/2 : Math.PI/2;
+    const rotation = left ? -Math.PI : Math.PI;
+    new TWEEN.Tween(player.rotation).to({y:rotation}, 200).delay(walkTime).start();
+    //timeout instead of onComplete for a timing reason
+
+    animationTime = walkTime+200;
+    setTimeout(function() {
+        player.rotation.y = left ? -Math.PI : Math.PI;
+        stopWalk(false);},
+    animationTime);
+}
+
 function stopWalk(front=true) {
     TWEEN.getAll().forEach(element => element.stop());
-    const leftLowerArm = player.getObjectByName('LowerArmL');
-    const rightLowerArm = player.getObjectByName('LowerArmR');
 
     //Re-inizialization
     haveToWalk = true;
@@ -199,24 +213,6 @@ function stopWalk(front=true) {
     new TWEEN.Tween(player.getObjectByName('UpperArmR').rotation).to({z:Math.PI/2}, 200).start();
 }
 
-function walkAndTurnToTarget(left, targetX, tagetZ){
-    //Walk until the right x
-    walk(left, targetX);    //This set walkTime
-    //Turn backward
-    player.rotation.y = left ? -Math.PI/2 : Math.PI/2;
-    const rotation = left ? -Math.PI : Math.PI;
-    new TWEEN.Tween(player.rotation).to({y:rotation}, 200).delay(walkTime).start();
-    //timeout instead of onComplete for a timing reason
-
-    animationTime = walkTime+200;
-    setTimeout(function() {
-        player.rotation.y = left ? -Math.PI : Math.PI;
-        stopWalk(false);},
-    animationTime);
-
-    //Walk until the right z
-}
-
 function sbra(bell) {
     const rope = bell.position.x - 4;
     //Walk to reach the rope
@@ -227,6 +223,14 @@ function sbra(bell) {
     //traslazione giù e poi su
     //movimento delle braccia/gambe
     setTimeout(function() {songBell(bell)}, animationTime);
+
+    const abd = player.getObjectByName('Abdomen');
+    const torso = player.getObjectByName('Torso');
+
+    const t01 = new TWEEN.Tween(torso.rotation).to({x:Math.PI/6}, 800).start();
+    const a01 = new TWEEN.Tween(abd.rotation).to({x:Math.PI/6}, 800).start();
+    //Poi braccia avanti e ginocchia piegate
+
 }
 
 function ops() {
@@ -261,16 +265,11 @@ function climbStairs(up) {
     //Where up means the player is in the upper floor and have to come down
 
     //Walk to reach the ladder
-    const left = player.position.x > -14 ? true : false;
-    walkAndTurnToTarget(left, -14); //This set animationTime
+    const left = player.position.x > -14.9 ? true : false;
+    walkAndTurnToTarget(left, -14.9); //This set animationTime
     animationTime += 5;
 
-    setTimeout(function(){
-        player.position.y *= -1;
-        player.position.z = up ? 7 : 2;
-    }, animationTime);
-
-    //traslazione su/giù e movimento gambe/braccia
+    const abd = player.getObjectByName('Abdomen');
     const leftShoulder = player.getObjectByName('ShoulderL');
     const rightShoulder = player.getObjectByName('ShoulderR');
     const leftUpperArm = player.getObjectByName('UpperArmL');
@@ -285,8 +284,197 @@ function climbStairs(up) {
     const leftFoot = player.getObjectByName('FootL');
     const rightFoot = player.getObjectByName('FootR');
 
-    // leftShoulder.rotation.x = -Math.PI/4;
-    // rightUpperArm.rotation.z = Math.PI;
+    const stepTime = 500;
+
+    //Torso slope
+    new TWEEN.Tween(abd.rotation).to({x:Math.PI/10}, 500).start();
+
+    //Legs movement
+    const lul01 = new TWEEN.Tween(leftUpperLeg.rotation).to({x:-Math.PI/2}, stepTime);
+    const lul02 = new TWEEN.Tween(leftUpperLeg.rotation).to({x:0}, stepTime);
+
+    const rul00 = new TWEEN.Tween(rightUpperLeg.rotation).to({x:0}, stepTime);
+    const rul01 = new TWEEN.Tween(rightUpperLeg.rotation).to({x:-Math.PI/2}, stepTime);
+    
+    const lll01 = new TWEEN.Tween(leftLowerLeg.rotation).to({x:Math.PI/3, z:Math.PI/8}, stepTime);
+    const lll02 = new TWEEN.Tween(leftLowerLeg.rotation).to({x:0, z:0}, stepTime);
+
+    const rll00 = new TWEEN.Tween(rightLowerLeg.rotation).to({x:0, z:0}, stepTime);
+    const rll01 = new TWEEN.Tween(rightLowerLeg.rotation).to({x:Math.PI/3, z:Math.PI/8}, stepTime);
+
+    //Foot position
+    const lf01 = new TWEEN.Tween(leftFoot.position).to({y: 1,z:1.2}, stepTime);
+    const lf02 = new TWEEN.Tween(leftFoot.position).to({y: 0,z:0}, stepTime);
+
+    const rf00 = new TWEEN.Tween(rightFoot.position).to({y: 0,z:0}, stepTime);
+    const rf01 = new TWEEN.Tween(rightFoot.position).to({y: 1,z:1.2}, stepTime);
+
+    //Concatenation
+        //upper
+        lul01.chain(lul02);
+        lul02.chain(lul01);
+        rul00.chain(rul01);
+        rul01.chain(rul00);
+        //lower
+        lll01.chain(lll02);
+        lll02.chain(lll01);
+        rll00.chain(rll01);
+        rll01.chain(rll00);
+        //foot
+        lf01.chain(lf02);
+        lf02.chain(lf01);
+        rf00.chain(rf01);
+        rf01.chain(rf00);
+
+     //Arms movement
+     const rs01 = new TWEEN.Tween(rightShoulder.rotation).to({x:-Math.PI/4}, stepTime);
+     const rs02 = new TWEEN.Tween(rightShoulder.rotation).to({x:0}, stepTime);
+     const rua01 = new TWEEN.Tween(rightUpperArm.rotation).to({z:5*Math.PI/6}, stepTime);
+     const rua02 = new TWEEN.Tween(rightUpperArm.rotation).to({z:2*Math.PI/3}, stepTime);
+     const rla01 = new TWEEN.Tween(rightLowerArm.rotation).to({y:0, z:Math.PI/5}, stepTime);
+     const rla02 = new TWEEN.Tween(rightLowerArm.rotation).to({y:Math.PI/12, z:Math.PI/2}, stepTime);
+
+
+     const ls01 = new TWEEN.Tween(leftShoulder.rotation).to({x:0}, stepTime);
+     const ls02 = new TWEEN.Tween(leftShoulder.rotation).to({x:-Math.PI/4}, stepTime);
+     const lua01 = new TWEEN.Tween(leftUpperArm.rotation).to({z:-2*Math.PI/3}, stepTime);
+     const lua02 = new TWEEN.Tween(leftUpperArm.rotation).to({z:-5*Math.PI/6}, stepTime);
+     const lla01 = new TWEEN.Tween(leftLowerArm.rotation).to({y:0, z:-Math.PI/2}, stepTime);
+     const lla02 = new TWEEN.Tween(leftLowerArm.rotation).to({y:Math.PI/12, z:-Math.PI/5}, stepTime);
+
+     //Concatenation
+        //Shoulder
+        rs01.chain(rs02);
+        rs02.chain(rs01);
+        ls01.chain(ls02);
+        ls02.chain(ls01);
+        //Upper arm
+        rua01.chain(rua02);
+        rua02.chain(rua01);
+        lua01.chain(lua02);
+        lua02.chain(lua01);
+        //Lower arm
+        rla01.chain(rla02);
+        rla02.chain(rla01);
+        lla01.chain(lla02);
+        lla02.chain(lla01);
+
+    function goUp() {
+
+        let zStart = 7;
+        for(let i=-5; i<6; i++) {
+            new TWEEN.Tween(player.position).to({y:i, z:zStart}, stepTime).delay(stepTime*(i+5)).easing(TWEEN.Easing.Quadratic.Out).start();
+            player.position.y = i;
+            player.position.z = zStart;
+            zStart -= 0.2;
+        }
+
+        lul01.start();
+        rul00.start();
+        lll01.start();
+        rll00.start();
+        lf01.start();
+        rf00.start();
+
+        rs01.start();
+        ls01.start();
+        rua01.start();
+        lua01.start();
+        rla01.start();
+        lla01.start();
+
+        setTimeout(function() {
+            for (const element of [rs01, rs02, ls01, ls02, rua01, rua02, lua01, lua02, rla01, rla02, lla01, lla02]) {
+                element.stop();
+            }
+            new TWEEN.Tween(rightShoulder.rotation).to({x:-Math.PI/4}, stepTime).start();
+            new TWEEN.Tween(rightUpperArm.rotation).to({z:Math.PI/2}, stepTime).start();
+            new TWEEN.Tween(rightLowerArm.rotation).to({y:0, z:0}, stepTime).start();
+            new TWEEN.Tween(leftShoulder.rotation).to({x:-Math.PI/4}, stepTime).start();
+            new TWEEN.Tween(leftUpperArm.rotation).to({z:-Math.PI/2}, stepTime).start();
+            new TWEEN.Tween(leftLowerArm.rotation).to({y:0, z:0}, stepTime).start();
+
+            setTimeout(function() {
+                for (const element of [lul01, lul02, lll01, lll02, lf01, lf02]) {
+                    element.stop();
+                }          
+            }, stepTime*2);
+
+        }, stepTime*8);
+
+        setTimeout(function () {
+            stopClimb();
+            new TWEEN.Tween(player.position).to({z:4}, 200).start();
+        }, stepTime*11);
+    }
+
+    function goDown() {
+
+        let zStart = 5;
+
+        for(let i=5; i>-6; i--) {
+            new TWEEN.Tween(player.position).to({y:i, z:zStart}, stepTime).delay(stepTime*(5-i)).easing(TWEEN.Easing.Quadratic.Out).start();
+            player.position.y = i;
+            player.position.z = zStart;
+            zStart += 0.2;
+        }
+
+        setTimeout(function () {
+            lul02.start();
+            rul01.start();
+            lll02.start();
+            rll01.start();
+            lf02.start();
+            rf01.start();
+        }, stepTime);
+
+        setTimeout(function () {
+            rs02.start();
+            ls02.start();
+            rua02.start();
+            lua02.start();
+            rla02.start();
+            lla02.start();
+        }, stepTime*3);
+
+        setTimeout(function(){
+            stopClimb();
+        }, stepTime*11);
+    }
+
+    setTimeout(function(){
+        if(up) {
+            goDown();
+        }
+        else {
+            goUp();
+        }
+    }, animationTime);
+
+    // animationTime = tempo
+
+    // setTimeout(function(){
+    //     stopClimb();
+    // }, animationTime);
+
+}
+
+function stopClimb() {
+    TWEEN.getAll().forEach(element => element.stop());
+
+    new TWEEN.Tween(player.getObjectByName('Abdomen').rotation).to({x:Math.PI/16}, 200).start();
+    new TWEEN.Tween(player.getObjectByName('UpperLegL').rotation).to({x:0}, 200).start();
+    new TWEEN.Tween(player.getObjectByName('LowerLegL').rotation).to({x:0, z:0}, 200).start();
+    new TWEEN.Tween(player.getObjectByName('FootL').position).to({y:0, z:0}, 200).start();
+    new TWEEN.Tween(player.getObjectByName('UpperLegR').rotation).to({x:0}, 200).start();
+    new TWEEN.Tween(player.getObjectByName('LowerLegR').rotation).to({x:0, z:0}, 200).start();
+    new TWEEN.Tween(player.getObjectByName('FootR').position).to({y:0, z:0}, 200).start();
+    new TWEEN.Tween(player.getObjectByName('ShoulderL').rotation).to({x:0}, 200).start();
+    new TWEEN.Tween(player.getObjectByName('ShoulderR').rotation).to({x:0}, 200).start();
+    new TWEEN.Tween(player.getObjectByName('UpperArmL').rotation).to({z:-Math.PI/2}, 200).start();
+    new TWEEN.Tween(player.getObjectByName('UpperArmR').rotation).to({z:Math.PI/2}, 200).start();
+    new TWEEN.Tween(player.getObjectByName('LowerArmL').rotation).to({y:0, z:0}, 200).start();
+    new TWEEN.Tween(player.getObjectByName('LowerArmR').rotation).to({y:0, z:0}, 200).start();
 }
 
 export { songTime, animationTime, songBell, walk, stopWalk, climbStairs, sbra, ops, moveCamera }
