@@ -3,7 +3,6 @@ import { TWEEN } from './three/examples/jsm/libs/tween.module.min.js'
 
 import { loadResources } from './modules/loaders.mjs';
 import  { loadEasy, loadMedium, loadDifficult } from './modules/models.mjs'
-import { sbra, climbStairs } from './modules/animations.mjs';
 import { camera, initScene, initCamera, initLights } from './modules/utils.mjs';
 import { initAudio } from './modules/audio.mjs';
 import { startGame } from './modules/gameManager.mjs';
@@ -117,6 +116,13 @@ document.getElementById("hard").onclick = function() {
 };
 
 function main() {
+  //Set the background
+  const bb = document.body;
+  bb.style.backgroundImage = "url('res/menuBackground.jpeg')";
+  bb.style.backgroundRepeat = 'no-repeat';
+  bb.style.backgroundAttachment = 'fixed';
+  bb.style.backgroundSize = '100% 100%';
+
   // Hide the loading bar
   const loadingElem = document.getElementById('loading');
   loadingElem.style.display = 'none';

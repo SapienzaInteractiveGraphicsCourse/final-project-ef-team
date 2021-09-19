@@ -1,7 +1,7 @@
 html, body {
     margin: 0;
     /* height: 100%; */
- }
+  }
 
  #loading {
     position: absolute;
@@ -55,7 +55,7 @@ html, body {
 }
 
 .btn {
-  background-color: rgba(163, 106, 255, 0.5);
+  background-color: rgba(163, 106, 255, 0.8);
   border: 1px solid black;
   font-size: xx-large;
   margin: 2%;
@@ -66,6 +66,7 @@ html, body {
 #choose {
   font-size: xx-large;
   margin: 2%;
+  text-shadow: 2px 0 2px white, -2px 0 2px white, 0 2px 2px white, 0 -2px 2px white, 1px 1px white, -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white;  
 }
 
 .under {
