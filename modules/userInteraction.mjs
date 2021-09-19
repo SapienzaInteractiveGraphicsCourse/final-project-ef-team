@@ -71,7 +71,7 @@ function doSomething() {
 	stopInteraction();
 
     if (player.position.x < -10){
-        climbStairs(player.position.y === 5);
+        climbStairs(player.position.y > 4.5);
 		setTimeout(setUpListener, animationTime);
     }
     else{ 

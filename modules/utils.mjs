@@ -31,26 +31,8 @@ function initLights(scene) {
         light.shadow.camera.far = 28;
         light.shadow.bias = 0.0001;
         light.shadow.radius = 3;
-
-        const cameraHelper = new THREE.CameraHelper(light.shadow.camera);
-        scene.add(cameraHelper);
     }
     scene.add(light);
-}
-
-function addLight(obj) {
-    let light;
-    
-    light.shadow.mapSize.width = 512; // default
-    light.shadow.mapSize.height = 512; // default
-    light.shadow.camera.near = 0.5; // default
-    light.shadow.camera.far = 500; // default
-
-    // light.shadow.mapSize.width = 2048;
-    // light.shadow.mapSize.height = 2048;
-    // light.shadow.camera.near = 1;
-    // light.shadow.camera.far = 50;
-    return light;
 }
 
 export { camera, initScene, initCamera, initLights }
