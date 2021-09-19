@@ -90,6 +90,8 @@ function start() {
   chooseDifficulty.style.display = 'none';
   const settings = document.getElementById('menu');
   settings.style.display = 'none';
+  const commands = document.getElementById('commands');
+  commands.style.display = 'none';
 
   //Display the life
   const life = document.getElementById('overLife');
@@ -136,6 +138,9 @@ function main() {
 
   const best = document.getElementById('over');
   best.style.display = 'block';
+
+  const commands = document.getElementById('commands');
+  commands.style.display = 'block';
 }
 
 /*********************************************************************************************************
