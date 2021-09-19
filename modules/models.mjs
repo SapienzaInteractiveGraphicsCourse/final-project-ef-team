@@ -31,7 +31,6 @@ function createBell(scene, horizontal, vertical) {
     light.position.x += 17;
     root.getObjectByName("Torus").add(light);
 
-    //TODO check dimensions
     //Rope
     const ropeGeometry = new THREE.CylinderGeometry(0.15,0.15,5);
     const ropeTexture = textures['rope'].tex;
@@ -67,7 +66,6 @@ function createBell(scene, horizontal, vertical) {
 
 function createPlayer(scene) {
     let root = models['player'].gltf.scene.getObjectByName('HumanArmature');
-    //TODO set the right position
     root.position.set(-9,-5,7);
     // root.position.set(-9,5,2);
     player = root;
@@ -102,10 +100,10 @@ function createFloor(scene, up) {
     // Shadows
     if(up) {
         mesh.castShadow = true;
-        mesh.receiveShadow = true;
+        mesh.receiveShadow = false;
     }
     else {
-        mesh.castShadow = true;
+        mesh.castShadow = false;
         mesh.receiveShadow = true;
     }
 
@@ -125,9 +123,7 @@ function createWalls(scene) {
     const normalMap = textures['normalwall'].tex;
 
     const planeGeo = new THREE.PlaneGeometry(20, 30);
-    // const planeMat = new THREE.MeshPhongMaterial({ map: texture, normalMap: normalMap });
-    const planeMat = new THREE.MeshStandardMaterial({ map: texture, normalMap: normalMap });
-    // const planeMat = new THREE.MeshStandardMaterial({ color:'pink' });
+    const planeMat = new THREE.MeshPhongMaterial({ map: texture, normalMap: normalMap });
     const rightWall = new THREE.Mesh(planeGeo, planeMat);
     const leftWall = new THREE.Mesh(planeGeo, planeMat);
 
@@ -137,9 +133,9 @@ function createWalls(scene) {
     leftWall.position.set(-20, 10, 0);
 
     // Shadows
-    rightWall.castShadow = true;
+    rightWall.castShadow = false;
     rightWall.receiveShadow = true;
-    leftWall.castShadow = true;
+    leftWall.castShadow = false;
     leftWall.receiveShadow = true;
 
     const walls = new THREE.Object3D();
@@ -157,7 +153,7 @@ function createBackground(scene) {
     const mesh = new THREE.Mesh(planeGeo, planeMat);
 
     // Shadows
-    mesh.castShadow = true;
+    mesh.castShadow = false;
     mesh.receiveShadow = true;
 
     mesh.position.set(0,10,-10);
@@ -186,11 +182,7 @@ function createLadder(scene) {
     let root = models['ladder'].gltf.clone();
     root.scale.set(0.01,0.01,0.01);
     root.rotation.y = Math.PI * -.5;
-    const mat = new THREE.MeshPhongMaterial({color:
-    0x843115});
-    //0x925417});
-    //0x912e17});
-    //0x422424});
+    const mat = new THREE.MeshPhongMaterial({color: 0x843115});
     root.traverse( function( child ) {
         if ( child instanceof THREE.Mesh ) {
             child.material = mat;
