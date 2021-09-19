@@ -132,7 +132,7 @@ function userSing() {
             checkWin();
 
             if(!win) {
-                setTimeout(setUpListener, songTime+animationTime);
+                setTimeout(setUpListener, animationTime);
             }
         }
         else {
@@ -166,7 +166,7 @@ function checkWin() {
         setTimeout(function() {
             window.alert("Press OK to start a new level!");
             document.getElementById('bestScore').innerHTML = bestScore;
-            startLevel()}, songTime+animationTime);
+            startLevel()}, animationTime);
     }
 }
 

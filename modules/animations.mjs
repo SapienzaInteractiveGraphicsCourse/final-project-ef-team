@@ -63,6 +63,7 @@ let haveToWalk = true;
 let walkTime;
 let animationTime;
 
+/***********    MOVEMENTS OF BONES TO WALK   ******************/
 function walkMovement() {
     const leftUpperArm = player.getObjectByName('UpperArmL');
     const rightUpperArm = player.getObjectByName('UpperArmR');
@@ -156,6 +157,7 @@ function walkMovement() {
         lua01.start();
 }
 
+/***********    LATERAL WALK --> on x  ******************/
 function walk(left, target) {
     if( haveToWalk ) {
         haveToWalk = false;
@@ -183,6 +185,7 @@ function walk(left, target) {
     }
 }
 
+/***********    REACH A TARGET ON X AND TURN   ******************/
 function walkAndTurnToTarget(left, targetX, side){
     //Walk until the right x
     walk(left, targetX);    //This set walkTime
@@ -207,6 +210,7 @@ function walkAndTurnToTarget(left, targetX, side){
     animationTime);
 }
 
+/***********    STOP WALKING   ******************/
 function stopWalk(front=true) {
     TWEEN.getAll().forEach(element => element.stop());
 
@@ -225,26 +229,104 @@ function stopWalk(front=true) {
     new TWEEN.Tween(player.getObjectByName('UpperArmR').rotation).to({z:Math.PI/2}, 200).start();
 }
 
+/***********    SING A BELL   ******************/
 function sbra(bell) {
     const rope = bell.position.x - 4;
-    //Walk to reach the rope
+    //Walk to reach the rope on X
     const left = player.position.x > rope ? true : false;
     walkAndTurnToTarget(left, rope, 'back');    //This set animationTime
     animationTime += 5;
 
-    //traslazione giù e poi su
-    //movimento delle braccia/gambe
-    setTimeout(function() {songBell(bell)}, animationTime);
+    //Walk to reach the rope on Z
+    let zPos;
+    switch (bell.parent.name) {
+        case 'GroundFloor':
+            zPos = 2;
+            break;
+        case 'FirstFloor':
+            zPos = -1;
+            break;
+    }
 
-    const abd = player.getObjectByName('Abdomen');
-    const torso = player.getObjectByName('Torso');
+    setTimeout(function() {
+        walkMovement();
+        new TWEEN.Tween(player.position).to({z:zPos}, 1000).start()
+        .onComplete(function() {
+            stopWalk(false);
+        });
+    }, animationTime);
 
-    const t01 = new TWEEN.Tween(torso.rotation).to({x:Math.PI/6}, 800).start();
-    const a01 = new TWEEN.Tween(abd.rotation).to({x:Math.PI/6}, 800).start();
-    //Poi braccia avanti e ginocchia piegate
+    animationTime += 1050;
 
+    //Movement to song
+    setTimeout(function() {
+        //traslazione giù e poi su
+        //movimento delle braccia/gambe
+
+        const abd = player.getObjectByName('Abdomen');
+        const torso = player.getObjectByName('Torso');
+        const rightUpperArm = player.getObjectByName('UpperArmR')
+        const leftUpperArm = player.getObjectByName('UpperArmL')
+
+        const t01 = new TWEEN.Tween(torso.rotation).to({x:Math.PI/6}, 1000);
+        const t02 = new TWEEN.Tween(torso.rotation).to({x:0}, 1000);
+        const a01 = new TWEEN.Tween(abd.rotation).to({x:Math.PI/4}, 1000);
+        const a02 = new TWEEN.Tween(abd.rotation).to({x:Math.PI/10}, 1000);
+
+        new TWEEN.Tween(rightUpperArm.rotation).to({y:Math.PI/8, z:5*Math.PI/4}, 500).start();
+        new TWEEN.Tween(leftUpperArm.rotation).to({y:-Math.PI/8, z:-5*Math.PI/4}, 500).start();
+
+        t01.chain(t02);
+        a01.chain(a02);
+        t01.delay(500).start();
+        a01.delay(500).start();
+        //Poi braccia avanti e ginocchia piegate
+    }, animationTime);
+
+    //Song the bell
+    setTimeout(function() {songBell(bell)}, animationTime+500);
+
+    animationTime += songTime + 550;
+
+    setTimeout(function() {
+        stopSbra();
+    }, animationTime);
+
+    animationTime += 205;
+
+    //Go back
+    setTimeout(function() {
+        switch (bell.parent.name) {
+            case 'GroundFloor':
+                zPos = 7;
+                break;
+            case 'FirstFloor':
+                zPos = 2;
+                break;
+        }
+        walkMovement();
+        new TWEEN.Tween(player.position).to({z:zPos}, 1000).start()
+        .onComplete(function() {
+            stopWalk();
+        });
+    }, animationTime);
+
+    animationTime += 1205;
 }
 
+/***********    STOP SINGING   ******************/
+function stopSbra() {
+    TWEEN.getAll().forEach(element => element.stop());
+
+    new TWEEN.Tween(player.rotation).to({y:0}, 200).start();
+    new TWEEN.Tween(player.getObjectByName('Abdomen').rotation).to({x:Math.PI/16}, 200).start();
+    new TWEEN.Tween(player.getObjectByName('Torso').rotation).to({x:Math.PI/16}, 200).start();
+    new TWEEN.Tween(player.getObjectByName('UpperArmL').rotation).to({y:-Math.PI/12, z:-Math.PI/2}, 200).start();
+    new TWEEN.Tween(player.getObjectByName('UpperArmR').rotation).to({y:Math.PI/12, z:Math.PI/2}, 200).start();
+}
+
+
+/***********    WRONG BELL   ******************/
 function ops() {
     animationTime = 3300;
     moveCamera(true);
@@ -273,6 +355,7 @@ function ops() {
     n01.start();
 }
 
+/***********    INTERACTION WITH THE LADDER  ******************/
 function climbStairs(up) {
     //Where up means the player is in the upper floor and have to come down
 
@@ -292,6 +375,7 @@ function climbStairs(up) {
 
     const left = player.position.x > -14.9 ? true : false;
 
+    /***********    MOVEMENTS TO CLIMB THE LADDER   ******************/
     function goUp() {
         //Walk to reach the ladder
         walkAndTurnToTarget(left, -14.9, 'back'); //This set animationTime
@@ -428,13 +512,24 @@ function climbStairs(up) {
 
         }, animationTime);
 
-        animationTime += stepTime*11+1000;
+        animationTime += stepTime*11+1050;
     }
 
+    /***********    MOVEMENTS TO JUMP OFF   ******************/
     function goDown() {
         //Walk to reach the ladder
         walkAndTurnToTarget(left, -14.9, 'front'); //This set animationTime
         animationTime += 5;
+
+        setTimeout(function() {
+            walkMovement();
+            new TWEEN.Tween(player.position).to({z:4}, 1000).start()
+            .onComplete(function() {
+                stopWalk();
+            });
+        }, animationTime);
+
+        animationTime += 1050;
 
         const jumpTime = 3000;
 
@@ -512,6 +607,7 @@ function climbStairs(up) {
 
 }
 
+/***********    STOP CLIMBING  ******************/
 function stopClimb(time=200) {
     TWEEN.getAll().forEach(element => element.stop());
 
